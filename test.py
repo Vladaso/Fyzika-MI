@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def mag_pole_dipolu(r_x,r_y,r0_x=0.0,r0_y=.0,m_x=0.0,m_y=1.0):
+def mag_pole_dipolu(r_x,r_y,r0_x=0.0,r0_y=0.0,m_x=1,m_y=1):
 #
 #   funkcia, ktora spocita zlozky B_x a B_y indukcie magnetickeho pola v mieste so suradnicami r_x,r_y
 #   vysunutie polohy dipolu je pomocou zloziek vektora r0_x,r0_y
@@ -12,7 +12,7 @@ def mag_pole_dipolu(r_x,r_y,r0_x=0.0,r0_y=.0,m_x=0.0,m_y=1.0):
 #   vypocet velkosti vzrialenosti miesta r od dipolu
     r = np.sqrt(r_x*r_x + r_y*r_y) 
 #   vypocer zloziek podla vztahu na https://en.wikipedia.org/wiki/Magnetic_dipole
-    B_x = 3*r_x*(m_x*x + m_y*r_y)/r**5 - m_x/r**3
+    B_x = 3*r_x*(m_x*r_x + m_y*r_y)/r**5 - m_x/r**3
     B_y = 3*r_y*(m_x*r_x + m_y*r_y)/r**5 - m_y/r**3
     return B_x,B_y
 
@@ -26,7 +26,7 @@ B = np.sqrt(B_x**2 + B_y**2)
 # smerovy vektor magnetickeho pola v kazdom bode mriezky 
 n_x, n_y  = B_x/B, B_y/B
 
-# vykreslenie magnetickeho pola pomocou matplotlib
+#vykreslenie magnetickeho pola pomocou matplotlib
 plt.quiver(x,y,B_x,B_y,pivot='mid')
 plt.show()
 
@@ -34,3 +34,13 @@ plt.show()
 plt.quiver(x,y,B_x/B,B_y/B,pivot='mid')
 plt.streamplot(x,y,n_x,n_y,color="lightgrey")
 plt.show()
+
+def get_B_specific_point(x,y,m_x=0.0,m_y=1,r0_x=0.0,r0_y=0.0):
+    r_x = x - r0_x
+    r_y = y - r0_y
+    r = np.sqrt(r_x*r_x + r_y*r_y) 
+    B_x = 3*r_x*(m_x*r_x + m_y*r_y)/r**5 - m_x/r**3
+    B_y = 3*r_y*(m_x*r_x + m_y*r_y)/r**5 - m_y/r**3
+    return str(np.sqrt(B_x**2 + B_y**2)) + " " + str(B_x) + " " + str(B_y)
+
+print(get_B_specific_point(8,0))
